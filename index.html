@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Titulo do Site-->
+    <title>Concessionária IBM</title>
+
+    <!--Sub-titulo de entrada-->
+    <p style="text-align: center; font-size: 22px; font-style: italic;">Bem-Vindo ao...</p>
+
+    <!--Nome Ficticio de Sistema-->
+    <h1 style="text-align: center; font-style: italic; font-size: 38px;  color: #2f2fb3;">Sistema Concessionária IBM</h1>
+    
+    <!--Style Intern usado para evitar uso de arquivos externos e erro-->
+    <style>
+        /* tabela */
+        table, th, td {
+            border: 1px solid #ffff;
+            border-collapse: collapse;
+        }
+        th, td {
+            color: #ffff;
+            font-weight: bolder;
+            padding: 15px;
+        }
+
+        /* botoes tabela */
+        #tabelaModelos > tbody > tr:nth-child(2) > td:nth-child(4),
+        #tabelaModelos > tbody > tr:nth-child(2) > td:nth-child(5){
+            text-align: center; width: 10px;
+        }
+
+        /* elementos internos tabela */
+        #tabelaModelos > tbody > tr:nth-child(2) > td:nth-child(1),
+        #tabelaModelos > tbody > tr:nth-child(2) > td:nth-child(2),
+        #tabelaModelos > tbody > tr:nth-child(2) > td:nth-child(3),
+        #tabelaModelos > tbody > tr:nth-child(3) > td:nth-child(1),
+        #tabelaModelos > tbody > tr:nth-child(3) > td:nth-child(2),
+        #tabelaModelos > tbody > tr:nth-child(3) > td:nth-child(3)
+        {
+            text-align: center;
+        }
+    </style>
+</head>
+
+    <!--Body site-->
+    <!-- Usado css inline em elementos no body para maior agilidade afim de evitar sobreposicao de cascade-->
+    <body>
+
+        <!-- Inicio Div Conteiner descricao e btn de marcas / Tabela Lateral de Modelos-->
+        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; 
+                    align-items: center; justify-content: center; 
+                    background-image: url('img/IBM_logo_in.jpg');background-position-y: center;
+                    height: 440px;">
+
+            <!--Inicio Div filho conteiner esq-->
+            <div style="width: 50%; text-align: center; background-color: #242424eb">
+                <h4 style="font-size: 20px; color: #ffff;">Selecione abaixo a marca desejada, para visualizar os modelos disponíveis.</h4>
+                    <select id="escolherMarca" onchange="mudarMarca()" style="text-align: center; width: 85%; height: 66px; font-size: 30px;">
+                        <option value="audi">AUDI</option>
+                        <option value="bmw">BMW</option>
+                    </select>
+                        <br><br>
+            </div>
+            <!--Fim Div filho conteiner esq-->
+
+            <!--Inicio Div filho conteiner dir-->
+            <div style="background-color: #242424eb; width: 50%; padding-top: 3px; padding-bottom: 3px;">
+
+                <!--Tabela de modelos das marcas-->
+                <table id="tabelaModelos" style="width: 95%;">
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Cor</th>
+                        <th>Motor</th>
+                        <th>Editar</th>
+                        <th>Deletar</th>
+                    </tr>
+                </table>
+            </div>
+            <!--fim Div filho conteiner dir-->    
+        </div>
+        <!-- Fim Div Conteiner descricao e btn de marcas / Tabela Lateral de Modelos-->
+
+        <br><br> <!--Quebra de linha conteiner e btn add marcas-->
+        
+        <!--Inicio Div btn Adicionar marca-->
+        <div style="text-align: center;">
+            <button onclick="adicionarMarca()" style="width: 670px; height: 50px; font-size: 22px; 
+                                                font-style: italic; background-color: #00fd28;"> Adicionar Nova Marca</button>
+        </div>
+        <!--Fim Div btn Adicionar marca-->
+
+        <!--Script js de forma interna a ser requisitado no DOM pelo Body-->
+        <!--Arquivo readme com especificacoes-->
+        <script>
+
+            //variavel incial inicada
+            var marca = 'audi';
+
+            //array mockado com dados fixos dos carros
+            var carros = {
+                audi: [
+                    {nomeCarro: 'A3 Seddan', corCarro: 'Azul', motorCarro: '2.2'},
+                    {nomeCarro: 'Q7', corCarro: 'Branca', motorCarro: '3.0'}
+                ],
+                bmw: [
+                    {nomeCarro: 'M3', corCarro: 'Preta', motorCarro: '3.2 Turbo'},
+                    {nomeCarro: '320i', corCarro: 'Vermelha', motorCarro: '2.8'}
+                ]
+            };
+
+            //funcao para alterar a marca dropdown
+            function mudarMarca() {
+                marca = document.getElementById('escolherMarca').value;
+                carregarModelos();
+            }
+
+            //funcao para carregar os modelos das marcas selecionadas criando suas respectivas tabelas
+            function carregarModelos() {
+                var table = document.getElementById('tabelaModelos');
+                table.innerHTML = '<tr><th>Modelo</th><th>Cor</th><th>Motor</th><th>Editar</th><th>Deletar</th></tr>';
+                for (var i = 0; i < carros[marca].length; i++) {
+                    var row = table.insertRow(-1);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    var cell4 = row.insertCell(3);
+                    var cell5 = row.insertCell(4);
+                    cell1.innerHTML = carros[marca][i].nomeCarro;
+                    cell2.innerHTML = carros[marca][i].corCarro;
+                    cell3.innerHTML = carros[marca][i].motorCarro;
+                    cell4.innerHTML = '<button onclick="editarModelo(' + i + ')">Editar</button>';
+                    cell5.innerHTML = '<button onclick="deletarModelo(' + i + ')">Deletar</button>';
+                }
+            }
+
+            //funcao para adicionar marca via front por input
+            function adicionarMarca() {
+                var novaMarca = prompt('Insira nova Marca:');
+                var novoModelo = prompt('Insira novo Modelo:');
+                var novaCor = prompt('Insira nova Cor:');
+                if (novaMarca, novoModelo, novaCor) {
+                    carros[novaMarca,novoModelo,novaCor] = [];
+                    var option = document.createElement('option');
+                    option.text = novaMarca;
+                    option.value = novaMarca;
+                    document.getElementById('escolherMarca').add(option);
+                }
+
+                var table = document.getElementById('tabelaModelos');
+                table.innerHTML = '<tr><th>Modelo</th><th>Cor</th><th>Motor</th><th>Editar</th><th>Deletar</th></tr>';
+                for (var i = 0; i < carros[marca].length; i++) {
+                    var row = table.insertRow(-1);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    var cell4 = row.insertCell(3);
+                    var cell5 = row.insertCell(4);
+                    cell1.innerHTML = carros[marca][i].nomeCarro;
+                    cell2.innerHTML = carros[marca][i].corCarro;
+                    cell3.innerHTML = carros[marca][i].motorCarro;
+                    cell4.innerHTML = '<button onclick="editarModelo(' + i + ')">Editar</button>';
+                    cell5.innerHTML = '<button onclick="deletarModelo(' + i + ')">Deletar</button>';
+                }
+            }
+
+            //funcao para editar modelo selecionado da marca respectiva
+            function editarModelo(index) {
+                var modeloCarro = carros[marca][index];
+                var nomeCarro = prompt('Insira novo Modelo:', modeloCarro.nomeCarro);
+                var corCarro = prompt('Insira nova cor:', modeloCarro.corCarro);
+                var motorCarro = prompt('Insira novo motor:', modeloCarro.motorCarro);
+                if (nomeCarro && corCarro && motorCarro) {
+                    modeloCarro.nomeCarro = nomeCarro;
+                    modeloCarro.corCarro = corCarro;
+                    modeloCarro.motorCarro = motorCarro;
+                    carregarModelos();
+                }
+            }
+
+            //funcao para deletar modelo da marca respectiva selecionada
+            function deletarModelo(index) {
+                carros[marca].splice(index, 1);
+                carregarModelos();
+            }
+
+            //funcao para carregar os modelos junto ao DOM
+            window.onload = function() {
+                carregarModelos();
+            }
+        </script>
+    </body>
+</html>
